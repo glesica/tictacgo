@@ -52,6 +52,13 @@ func (v *View) Update(state *game.State) {
 	widthSegment := width / 6
 	heightSegment := height / 6
 
+	// Update based on user input
+
+	if v.window.JustReleased(pixelgl.MouseButton1) && state.Winner() == marker.Empty {
+		sq := v.clickedSquare()
+		state.Move(sq)
+	}
+
 	// Draw the board
 
 	v.makeBoard(width, height).Draw(v.window)
@@ -128,4 +135,47 @@ func (v *View) makeMarker(symbol marker.T, center pixel.Vec, radius float64, isW
 	}
 
 	return img
+}
+
+func (v *View) clickedSquare() square.T {
+	position := v.window.MousePosition()
+	width := v.window.Bounds().W()
+	height := v.window.Bounds().H()
+
+	if position.X < width/3 {
+		// First column
+		if position.Y < height/3 {
+			return square.SW
+		}
+
+		if position.Y < height*2/3 {
+			return square.W
+		}
+
+		return square.NW
+	}
+
+	if position.X < width*2/3 {
+		// Second column
+		if position.Y < height/3 {
+			return square.S
+		}
+
+		if position.Y < height*2/3 {
+			return square.C
+		}
+
+		return square.N
+	}
+
+	// Third column
+	if position.Y < height/3 {
+		return square.SE
+	}
+
+	if position.Y < height*2/3 {
+		return square.E
+	}
+
+	return square.NE
 }
