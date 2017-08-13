@@ -1,17 +1,24 @@
-GOC=go build
-EXE=tictacgo
+PROJ=tictacgo
 EXEDEST=/usr/bin
 
-.PHONY: build get-deps install uninstall
+GOC=go build
+
+.PHONY: build fmt get install test uninstall
 
 build:
 	${GOC}
 
-get-deps:
+fmt:
+	go fmt $$(go list ./... | grep -v /${PROJ}/vendor/)
+
+get:
 	dep ensure
 
 install:
-	install ${EXE} ${EXEDEST}/
+	install ${PROJ} ${EXEDEST}/
+
+test:
+	go test $(go list ./... | grep -v /${PROJ}/vendor/)
 
 uninstall:
-	rm ${EXEDEST}/${EXE}
+	rm ${EXEDEST}/${PROJ}

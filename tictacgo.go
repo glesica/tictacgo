@@ -6,21 +6,27 @@ import (
 	"github.com/glesica/tictacgo/game"
 	"github.com/glesica/tictacgo/game/marker"
 	"github.com/glesica/tictacgo/view"
+	"github.com/glesica/tictacgo/view/gui"
 	"golang.org/x/image/colornames"
 )
+
+var viewer view.T
 
 func run() {
 	state := game.New()
 
 	cfg := pixelgl.WindowConfig{
-		Title:  "Tic Tac Go",
+		Title:  "Tic-Tac-Go",
 		Bounds: pixel.R(0, 0, 1024, 768),
 		VSync:  true,
 	}
+
 	win, err := pixelgl.NewWindow(cfg)
 	if err != nil {
 		panic(err)
 	}
+
+	viewer = gui.NewView(win)
 
 	for !win.Closed() {
 		win.Clear(colornames.White)
@@ -30,7 +36,7 @@ func run() {
 			_ = state.Move(sq)
 		}
 
-		view.Render(state, win)
+		viewer.Update(state)
 
 		win.Update()
 	}
