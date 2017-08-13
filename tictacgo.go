@@ -5,6 +5,7 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/glesica/tictacgo/game"
 	"github.com/glesica/tictacgo/view"
+	"github.com/glesica/tictacgo/view/cli"
 	"github.com/glesica/tictacgo/view/gui"
 )
 
@@ -31,6 +32,10 @@ func run() {
 
 		win.Update()
 	}
+
+	viewer = cli.NewView()
+
+	viewer.Update(state)
 }
 
 func main() {

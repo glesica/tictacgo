@@ -1,9 +1,9 @@
 package marker
 
-type T int
+type T string
 
 const (
-	X T = iota
-	O
-	Empty
+	X     T = "X"
+	O     T = "O"
+	Empty T = " "
 )
