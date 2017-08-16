@@ -3,7 +3,7 @@ EXEDEST=/usr/bin
 
 GOC=go build
 
-.PHONY: build fmt get install test uninstall
+.PHONY: build fmt get install test uninstall vet
 
 build:
 	${GOC}
@@ -18,7 +18,10 @@ install:
 	install ${PROJ} ${EXEDEST}/
 
 test:
-	go test $(go list ./... | grep -v /${PROJ}/vendor/)
+	go test $$(go list ./... | grep -v /${PROJ}/vendor/)
 
 uninstall:
 	rm ${EXEDEST}/${PROJ}
+
+vet:
+	go vet $$(go list ./... | grep -v /${PROJ}/vendor/)

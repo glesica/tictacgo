@@ -29,9 +29,9 @@ type View struct {
 	winnerColor     color.RGBA
 }
 
-// NewView constructs a new View struct that will draw on the
+// New constructs a new View struct that will draw on the
 // window provided.
-func NewView(window *pixelgl.Window) *View {
+func New(window *pixelgl.Window) *View {
 	return &View{
 		backgroundColor: backgroundColor,
 		boardColor:      boardColor,
@@ -43,7 +43,7 @@ func NewView(window *pixelgl.Window) *View {
 }
 
 // Update the drawn version of the game state.
-func (v *View) Update(state *game.State) {
+func (v *View) Update(state game.T) {
 	v.window.Clear(v.backgroundColor)
 
 	width := v.window.Bounds().W()

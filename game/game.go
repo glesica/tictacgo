@@ -9,18 +9,35 @@ import (
 	"github.com/glesica/tictacgo/game/square"
 )
 
-type State struct {
+type T interface {
+	// The marker current in the given square.
+	InSquare(sq square.T) marker.T
+
+	// Place the next player's marker in the given square. Return
+	// an error if the position is already occupied.
+	Move(sq square.T) error
+
+	// Whether the game is over (either a draw or win).
+	IsOver() bool
+
+	// Which marker is up next?
+	Turn() marker.T
+
+	// Which marker has won (empty if none).
+	Winner() marker.T
+}
+
+type state struct {
 	board map[square.T]marker.T
 	next  marker.T
 }
 
-func New() *State {
-	state := State{
+func New() T {
+	state := state{
 		board: make(map[square.T]marker.T),
 		next:  marker.X,
 	}
 
-	// TODO: If we made Empty the zero value would we get this for free?
 	for _, sq := range square.Positions {
 		state.board[sq] = marker.Empty
 	}
@@ -28,20 +45,12 @@ func New() *State {
 	return &state
 }
 
-// Retrieve the marker present in the given square.
-func (s *State) InSquare(sq square.T) marker.T {
+func (s *state) InSquare(sq square.T) marker.T {
 	return s.board[sq]
 }
 
-// Check to see whether the given square is occupied.
-func (s *State) IsEmpty(sq square.T) bool {
-	return s.board[sq] == marker.Empty
-}
-
-// Place a marker on the game board on behalf of the player whose
-// turn is next. Return an error if the square is already occupied.
-func (s *State) Move(sq square.T) error {
-	if !s.IsEmpty(sq) {
+func (s *state) Move(sq square.T) error {
+	if s.board[sq] != marker.Empty {
 		return errors.New("Square already occupied")
 	}
 
@@ -56,9 +65,21 @@ func (s *State) Move(sq square.T) error {
 	return nil
 }
 
-// Return the marker belonging to the winning player or, if there is
-// no winner, return the Empty marker.
-func (s *State) Winner() marker.T {
+func (s *state) IsOver() bool {
+	for _, mkr := range s.board {
+		if mkr == marker.Empty {
+			return s.Winner() != marker.Empty
+		}
+	}
+
+	return true
+}
+
+func (s *state) Turn() marker.T {
+	return s.next
+}
+
+func (s *state) Winner() marker.T {
 	for _, positions := range square.WinPositions {
 		p0 := positions[0]
 		p1 := positions[1]
