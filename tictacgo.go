@@ -1,12 +1,12 @@
 package main
 
 import (
+	"flag"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/glesica/tictacgo/game"
 	"github.com/glesica/tictacgo/view/cli"
 	"github.com/glesica/tictacgo/view/gui"
-	"flag"
 	"os"
 )
 

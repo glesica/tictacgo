@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/glesica/tictacgo/game"
 	"github.com/glesica/tictacgo/game/square"
-	"os"
 	"github.com/glesica/tictacgo/view"
+	"os"
 )
 
 type cliView struct{}
